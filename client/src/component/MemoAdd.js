@@ -79,7 +79,7 @@ function MemoAdd() {
 
         <div>
       
-                <TextField  type="text" name="content" value={content} onChange={handleValueChange}/><br/>
+                <TextField  type="text" name="content" value={content} onChange={handleValueChange}/>
                 
          
                 <Button variant="contained" color="primary" onClick={handleSubmit}>추가</Button>
