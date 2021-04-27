@@ -2,6 +2,11 @@ const express = require('express')
 const app = express()
 
 
+
+const bodyParser = require('body-parser')
+app.use(bodyParser.urlencoded({ extended: true  }))
+app.use(bodyParser.json())
+
 const fs = require('fs');
 const data = fs.readFileSync('./database.json')
 const conf = JSON.parse(data);
@@ -23,19 +28,44 @@ app.get('/api/todolist',(req, res) =>{
     "select * from todo",
     (err, rows, fields) =>{
       res.send(rows)
-     
+    
     }
   )
 })
 
 
-app.post('/api/todoadd',(req, res)=>{
-  let sql = "insert into todo values(0,?,0)"
+app.post('/api/add',(req, res)=>{
+
+  console.log(req.content)
+
+
+  let sql='insert into todo values(null,?,0)';
+ 
+  let content =req.body;
+let params = [content]
+  
+ 
+ 
+  
   conn.query(sql, params,
     (err, rows, fields)=>{
-      res.send(rows)
+      res.send(rows);
     })
+
+    
 })
+
+// app.post('/api/todolist',(req, res)=>{
+//   let sql = "insert into todo values(0,?,0)"
+//   let content = req.body;
+//   let params = [content]
+
+//   console.log(content)
+//   conn.query(sql, params,
+//     (err, rows, fields)=>{
+//       res.send(rows)
+//     })
+// })
 
 
 const port = process.env.PORT || 5000
