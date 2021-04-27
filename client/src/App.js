@@ -8,12 +8,12 @@ import { TableBody, TableCell, TableHead, TableRow, Table } from '@material-ui/c
 
 function App() {
 
-  const [Memo, setMemo] = useState("");
+  //const [Memo, setMemo] = useState("");
   const [completed, setCompleted] = useState(0);
   const [isLoad, setIsLoad] = useState(false);
 
 
-  useEffect(() => {
+ // useEffect(() => {
     // let complete = 0;
     // let timer = (() => {
     //   if (complete >= 100) {
@@ -29,39 +29,53 @@ function App() {
 
 
 
-    callApi().then(res => {
-      setMemo(res);
-    }).
-      catch(err => console.log(err));
+  //   callApi().then(res => {
+  //     setMemo(res);
+  //   }).
+  //     catch(err => console.log(err));
+  // }, []);
+
+  // const callApi = async () => {
+  //   const response = await fetch('/api/todolist');
+  //   const body = await response.json();
+  //   setIsLoad(true);
+
+  //   return body;
+
+  // }
+
+
+
+
+  
+
+
+
+  const [Memo, setMemo] = useState([])
+  const [progress, setProgress] = useState(0);
+  // useEffect(()=>{
+   
+  //   const result =  axios.get('/api/todolist')
+  //   setMemo(result.data)
+  //   console.log(result.data)
+    
+  // },[]);
+
+  useEffect(
+    async() => {
+
+    const result = await axios.get("./api/todolist");
+    setMemo(result.data);
+    console.log(result.data)
   }, []);
 
-  const callApi = async () => {
-    const response = await fetch('/api/todolist');
-    const body = await response.json();
-    setIsLoad(true);
 
-    return body;
-
-  }
-
-
-
-
-  console.log(Memo)
-
-  // const list = Memo.map((c) => {
-  //   return (
-  //     <TableRow key={c.id}>
-  //       <TableCell >
-  //         {c.id}
-  //       </TableCell>
-  //       <TableCell align="right">{c.content}</TableCell>
-  //       <TableCell align="right">{c.status}</TableCell>
-
-  //     </TableRow>
-  //   )
-  // })
-
+    const list = Memo.map((c) => {
+    return (
+      <Memolist id={c.id} content={c.content} status={c.status} />
+      
+    )
+  })
 
 
 
@@ -72,13 +86,13 @@ function App() {
         <TableHead>
           <TableRow>
             <TableCell>No.</TableCell>
-            <TableCell align="right">To-do</TableCell>
+            <TableCell align="center">To-do</TableCell>
             <TableCell align="right">완료</TableCell>
 
           </TableRow>
         </TableHead>
         <TableBody>
-          {/* { list } */}
+         {list}
         </TableBody>
       </Table>
       <MemoAdd />
