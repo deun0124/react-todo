@@ -4,7 +4,21 @@ import Memolist from './component/MemoList'
 import MemoAdd from './component/MemoAdd'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import { TableBody, TableCell, TableHead, TableRow, Table } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
+import { TableBody, TableCell, TableHead, TableRow, Table, Button } from '@material-ui/core'
+import CreateIcon from '@material-ui/icons/Create';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import { SettingsInputComponent } from '@material-ui/icons';
+import Dialog from '@material-ui/core/Dialog';
+
+import DialogTitle from '@material-ui/core/DialogTitle';
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 function App() {
 
@@ -13,19 +27,19 @@ function App() {
   const [isLoad, setIsLoad] = useState(false);
 
 
- // useEffect(() => {
-    // let complete = 0;
-    // let timer = (() => {
-    //   if (complete >= 100) {
-    //     complete = 0
-    //   } else {
-    //     complete += 1;
-    //   }
-    //   setCompleted(complete);
-    //   if (isLoad) {
-    //     clearInterval(timer);
-    //   }
-    // }, 20);
+  // useEffect(() => {
+  // let complete = 0;
+  // let timer = (() => {
+  //   if (complete >= 100) {
+  //     complete = 0
+  //   } else {
+  //     complete += 1;
+  //   }
+  //   setCompleted(complete);
+  //   if (isLoad) {
+  //     clearInterval(timer);
+  //   }
+  // }, 20);
 
 
 
@@ -47,55 +61,85 @@ function App() {
 
 
 
-  
+
 
 
 
   const [Memo, setMemo] = useState([])
   const [progress, setProgress] = useState(0);
   // useEffect(()=>{
-   
+
   //   const result =  axios.get('/api/todolist')
   //   setMemo(result.data)
   //   console.log(result.data)
-    
+
   // },[]);
 
   useEffect(
-    async() => {
+    async () => {
 
-    const result = await axios.get("./api/todolist");
-    setMemo(result.data);
-    console.log(result.data)
-  }, []);
+      const result = await axios.get("./api/todolist");
+      setMemo(result.data);
+      console.log(result.data)
+    }, []);
 
 
-    const list = Memo.map((c) => {
+  const list = Memo.map((c) => {
     return (
       <Memolist id={c.id} content={c.content} status={c.status} />
-      
+
     )
   })
 
+  const refreshComponents =
+    async () => {
+      const result = await axios.get("./api/todolist");
+      setMemo(result.data);
+    }
 
 
+  const [open, setOpen] = useState(false)
+  const handleClickOpen = () => {
+    setOpen(true);
+    console.log(open)
+
+
+  }
+
+
+
+  const handleClose = () => {
+    setOpen(false);
+  }
+
+  const classes = useStyles();
   return (
-    <div className="App">
+    <div className={classes.root}>
 
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>No.</TableCell>
             <TableCell align="center">To-do</TableCell>
-            <TableCell align="right">완료</TableCell>
+            <TableCell align="right">
+
+              <Button onClick={handleClickOpen} startIcon={<CreateIcon />} />
+              <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">오늘 할 일</DialogTitle>
+                <MemoAdd handleClose={handleClose} refreshComponents={refreshComponents} />
+
+              </Dialog>
+              <Button startIcon={<DeleteForeverIcon />} />
+
+            </TableCell>
 
           </TableRow>
         </TableHead>
         <TableBody>
-         {list}
+          {list}
         </TableBody>
       </Table>
-      <MemoAdd />
+      {/* <MemoAdd /> */}
     </div>
   );
 }

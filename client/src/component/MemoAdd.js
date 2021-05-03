@@ -4,7 +4,10 @@ import axios, {post} from 'axios'
 import { TextField, Button} from '@material-ui/core'
 
 
-function MemoAdd() {
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+function MemoAdd(props) {
 
     const [info, setinfo] = useState(
        { content : ''}
@@ -53,8 +56,8 @@ function MemoAdd() {
             content : ''
         })
       
-
-       
+    props.handleClose()
+       props.refreshComponents()
         
       
     }
@@ -72,20 +75,31 @@ function MemoAdd() {
     }
     
 
-       
         
     return (
 
 
-        <div>
-      
-                <TextField  type="text" name="content" value={content} onChange={handleValueChange}/>
+        <>
+          
+          <DialogContent>
+
+        <TextField  type="text" name="content" value={content} onChange={handleValueChange}/>
+
+</DialogContent>
+       
+       <DialogActions>
+         <Button onClick={props.handleClose} color="primary">
+          취소
+         </Button>
+         <Button  onClick={handleSubmit} color="primary">
+           To-do 입력
+         </Button>
+       </DialogActions>
                 
          
-                <Button variant="contained" color="primary" onClick={handleSubmit}>추가</Button>
             
-        
-    </div>
+     
+    </>
         // <div>
         //     <input type="text" name = "content" value={content} onChange={handleValueChange}></input>
         //     <button type="submit" onClick={handleSubmit} >추가</button>

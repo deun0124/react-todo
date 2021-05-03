@@ -32,7 +32,7 @@ function MemoComplete(props) {
         <div>
             <Button onClick={(e)=>{ 
                  
-                handleComplete(props.id)}}>{info.status !=0? "완료" : "진행"} </Button>
+                handleComplete(props.id)}} color={info.status !=0 ? "secondary" : "primary" }>{info.status !=0? "완료" : "진행"} </Button>
         </div>
     )
 }
