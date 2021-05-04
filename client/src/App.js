@@ -2,14 +2,15 @@ import logo from './logo.svg';
 import './App.css';
 import Memolist from './component/MemoList'
 import MemoAdd from './component/MemoAdd'
+import MemoDelete from './component/MemoDelete'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles';
 import { TableBody, TableCell, TableHead, TableRow, Table, Button } from '@material-ui/core'
 import CreateIcon from '@material-ui/icons/Create';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { SettingsInputComponent } from '@material-ui/icons';
+import { CheckBoxOutlineBlank, SettingsInputComponent } from '@material-ui/icons';
 import Dialog from '@material-ui/core/Dialog';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import DialogTitle from '@material-ui/core/DialogTitle';
 const useStyles = makeStyles((theme) => ({
@@ -84,13 +85,7 @@ function App() {
     }, []);
 
 
-  const list = Memo.map((c) => {
-    return (
-      <Memolist id={c.id} content={c.content} status={c.status} />
-
-    )
-  })
-
+  
   const refreshComponents =
     async () => {
       const result = await axios.get("./api/todolist");
@@ -112,6 +107,22 @@ function App() {
     setOpen(false);
   }
 
+  const [check, setCheck] = useState(false)
+  const handleCheck =()=>{
+    setCheck(!check);
+    
+  }
+  console.log(check)
+
+  const list = Memo.map((c) => {
+    return (
+      <Memolist id={c.id} content={c.content} status={c.status} check={
+        
+   check} />
+
+    )
+  })
+
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -129,8 +140,7 @@ function App() {
                 <MemoAdd handleClose={handleClose} refreshComponents={refreshComponents} />
 
               </Dialog>
-              <Button startIcon={<DeleteForeverIcon />} />
-
+               <Button check={check} onClick={handleCheck} startIcon={<DeleteForeverIcon />} /> 
             </TableCell>
 
           </TableRow>
